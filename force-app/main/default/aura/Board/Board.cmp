@@ -1,0 +1,50 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+
+    <!-- Create a attributes to fetch the words and winWord value from JS -->
+    <aura:attribute name="words" type="List"/>
+    <aura:attribute name="winWord" type="String"/>
+    <aura:attribute name="clickCount" type="Integer" default="0"/>
+    <aura:attribute name="mode" type="String" default="hard"/>
+    <aura:attribute name="layoutSize" type="Integer"/>
+    <aura:attribute name="result" type="String"/>
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+
+    <!-- Event handler to create the list of words during Initialization -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="onclick" event="c.BlockClickEvent" action="{!c.handleBlockClick}"/>
+
+    <!-- <aura:handler name="render" value="{!this}" action="{!c.doRender}"/> -->
+    <aura:method name="startGame" action="{!c.doInit}" description="Start new game">
+        
+    </aura:method>
+
+    <aura:method name="reShuffleBoard" action="{!c.reshuffleBoard }" description="Reshuffle Board"> </aura:method>
+
+    <div class="board">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-text-heading_medium"> WORD : <span class="win-word"> {!v.winWord} </span> </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-text-heading_medium">{!v.result}</div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-text-heading_medium">Moves left : {! (3 - v.clickCount)}</div>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <aura:if isTrue="{!v.disabled}">
+            <div class="board-disabled"></div>
+        </aura:if>
+        
+        <lightning:layout multipleRows="true">
+            <aura:iteration items="{!v.words}" var="wordObj">
+                <lightning:layoutItem size="{!v.layoutSize}" padding="around-small">
+                    <c:Block label="{!wordObj.word}" open="{!wordObj.open}"></c:Block>
+                </lightning:layoutItem>
+            </aura:iteration>
+        </lightning:layout>
+    </div>
+</aura:component>	
